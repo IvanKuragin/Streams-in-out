@@ -2,9 +2,16 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static Basket basket;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Basket basket = Basket.loadFromTxtFile();
+        if (Basket.binFile == null) {
+            Main.basket = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
+                    new int[]{50, 80, 60, 10}, new int[]{0, 0, 0, 0});
+        } else {
+            Main.basket = Basket.loadFromBinFile();
+        }
 
         while (true) {
             basket.getProductList();

@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +19,8 @@ public class Basket {
 
     protected static File textFile;
 
+    public static File binFile;
+
     public Basket(String[] products, int[] prices, int[] basket) {
         this.products = products;
         this.prices = prices;
@@ -31,9 +30,9 @@ public class Basket {
 
     public int[] addToCart(int productNum, int amount) {
         basket[productNum] += amount;
-        int[][] toFile;
         try {
             saveTxt(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.txt"));
+            saveBin(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.bin"));
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
@@ -104,11 +103,35 @@ public class Basket {
         return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                 new int[]{50, 80, 60, 10}, basket);
     }
-    public static void fileTermination () {
+
+    public static void fileTermination() {
         try {
             boolean termination = textFile.delete();
         } catch (NullPointerException error) {
             System.out.println("Операция завершена!");
         }
+    }
+
+    public void saveBin(File file) {
+        Basket.binFile = file;
+        Basket basketBin = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
+                new int[]{50, 80, 60, 10}, basket);
+        try (FileOutputStream fos = new FileOutputStream("Basket.bin");
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(basketBin);
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+        }
+    }
+
+    static Basket loadFromBinFile() {
+        Basket basketBin = null;
+        try (FileInputStream fis = new FileInputStream("Basket.bin");
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+            basketBin = (Basket) ois.readObject();
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+        }
+        return basketBin;
     }
 }
