@@ -13,7 +13,7 @@ public class Main {
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
-        Basket basket = Basket.loadFromTxtFile();
+        Basket basket = Basket.loadFromTxtFile(textFile);
 
         while (true) {
             basket.getProductList();

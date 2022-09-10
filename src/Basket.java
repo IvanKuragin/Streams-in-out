@@ -8,35 +8,32 @@ import java.util.List;
 
 public class Basket {
 
-    private static final int SHOP_SIZE = 4;
-
     private final String[] products;
 
     private final int[] prices;
 
-    protected int[] basket;
+    protected static int[] basket = new int[4];
 
     protected int[] summary;
 
     protected int sum;
 
-    public static File textFile;
+    public File textFile;
 
-    public Basket(String[] products, int[] prices, int[] basket) {
+    public Basket(String[] products, int[] prices, int[] basketFile) {
         this.products = products;
         this.prices = prices;
-        this.basket = basket;
-        this.summary = new int[SHOP_SIZE];
+        basket = basketFile;
+        this.summary = new int[4];
     }
 
-    public int[] addToCart(int productNum, int amount) {
+    public void addToCart(int productNum, int amount) {
         basket[productNum] += amount;
         try {
             saveTxt(Main.textFile);
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
-        return basket;
     }
 
     public void printCart() {
@@ -70,7 +67,7 @@ public class Basket {
     }
 
     public void saveTxt(File textFile) throws IOException {
-        Basket.textFile = textFile;
+        this.textFile = textFile;
         try (PrintWriter out = new PrintWriter(textFile)) {
             for (int amount : basket) {
                 out.print(amount + " ");
@@ -78,9 +75,8 @@ public class Basket {
         }
     }
 
-    static Basket loadFromTxtFile() {
-        int[] basket = new int[SHOP_SIZE];
-        try (FileReader in = new FileReader("Basket.txt", StandardCharsets.UTF_8)) {
+    static Basket loadFromTxtFile(File textFile) {
+        try (FileReader in = new FileReader(textFile, StandardCharsets.UTF_8)) {
             List<Integer> list = new ArrayList<>();
             while (in.ready()) {
                 char c = (char) in.read();
@@ -95,7 +91,7 @@ public class Basket {
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
-        return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
+        return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт"},
                 new int[]{50, 80, 60, 10}, basket);
     }
 }
