@@ -1,11 +1,19 @@
+import java.io.File;
 import java.util.Scanner;
 
 public class Main {
 
     private static Basket basket;
+    public static File binFile;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        try {
+            binFile = new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.bin");
+            binFile.createNewFile();
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+        }
         if (Basket.loadFromBinFile() == null) {
             Main.basket = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                     new int[]{50, 80, 60, 10}, new int[]{0, 0, 0, 0});
@@ -40,6 +48,6 @@ public class Main {
             }
         }
         basket.printCart();
-        Basket.fileTermination();
+        binFile.delete();
     }
 }

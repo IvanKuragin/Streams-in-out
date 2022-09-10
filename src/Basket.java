@@ -1,7 +1,4 @@
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Basket implements Serializable {
 
@@ -27,11 +24,7 @@ public class Basket implements Serializable {
 
     public int[] addToCart(int productNum, int amount) {
         basket[productNum] += amount;
-        try {
-            saveBin(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.bin"));
-        } catch (Exception error) {
-            System.out.println(error.getMessage());
-        }
+        saveBin(Main.binFile);
         return basket;
     }
 
@@ -64,6 +57,7 @@ public class Basket implements Serializable {
     String[] getProducts() {
         return products;
     }
+
     public static void fileTermination() {
         try {
             binFile.delete();
@@ -78,7 +72,6 @@ public class Basket implements Serializable {
                 new int[]{50, 80, 60, 10}, basket);
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-//            binFile.createNewFile();
             oos.writeObject(basketBin);
         } catch (Exception error) {
             System.out.println(error.getMessage());
