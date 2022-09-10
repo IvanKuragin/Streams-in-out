@@ -32,7 +32,7 @@ public class Basket {
     public int[] addToCart(int productNum, int amount) {
         basket[productNum] += amount;
         try {
-            saveTxt(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.txt"));
+            saveTxt(Main.textFile);
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
@@ -71,11 +71,6 @@ public class Basket {
 
     public void saveTxt(File textFile) throws IOException {
         Basket.textFile = textFile;
-        try {
-            boolean creation = textFile.createNewFile();
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
-        }
         try (PrintWriter out = new PrintWriter(textFile)) {
             for (int amount : basket) {
                 out.print(amount + " ");
@@ -102,12 +97,5 @@ public class Basket {
         }
         return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                 new int[]{50, 80, 60, 10}, basket);
-    }
-    public static void fileTermination () {
-        try {
-            boolean termination = textFile.delete();
-        } catch (NullPointerException error) {
-            System.out.println("Операция не завершена!");
-        }
     }
 }

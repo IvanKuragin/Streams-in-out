@@ -1,9 +1,18 @@
+import java.io.File;
 import java.util.Scanner;
 
 public class Main {
 
+    public static File textFile;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        try {
+            textFile = new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.txt");
+            textFile.createNewFile();
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+        }
         Basket basket = Basket.loadFromTxtFile();
 
         while (true) {
@@ -33,6 +42,6 @@ public class Main {
             }
         }
         basket.printCart();
-        Basket.fileTermination();
+        textFile.delete();
     }
 }
