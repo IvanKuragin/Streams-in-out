@@ -3,7 +3,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Basket {
+public class Basket implements Serializable {
 
     private static final int SHOP_SIZE = 4;
 
@@ -116,8 +116,9 @@ public class Basket {
         Basket.binFile = file;
         Basket basketBin = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                 new int[]{50, 80, 60, 10}, basket);
-        try (FileOutputStream fos = new FileOutputStream("Basket.bin");
+        try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            boolean creation = binFile.createNewFile();
             oos.writeObject(basketBin);
         } catch (Exception error) {
             System.out.println(error.getMessage());
@@ -126,7 +127,7 @@ public class Basket {
 
     static Basket loadFromBinFile() {
         Basket basketBin = null;
-        try (FileInputStream fis = new FileInputStream("Basket.bin");
+        try (FileInputStream fis = new FileInputStream("E:\\IDEA\\Projects\\Stream in out. Serialization\\Basket.bin");
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             basketBin = (Basket) ois.readObject();
         } catch (Exception error) {

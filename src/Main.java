@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        if (Basket.binFile == null) {
+        if (Basket.loadFromBinFile() == null) {
             Main.basket = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                     new int[]{50, 80, 60, 10}, new int[]{0, 0, 0, 0});
         } else {
