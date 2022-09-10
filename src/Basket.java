@@ -8,7 +8,7 @@ public class Basket implements Serializable {
 
     private final int[] prices;
 
-    protected static int[] basket = new int[4];
+    protected int[] basket;
 
     protected int[] summary;
 
