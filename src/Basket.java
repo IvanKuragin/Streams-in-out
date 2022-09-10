@@ -31,7 +31,6 @@ public class Basket {
 
     public int[] addToCart(int productNum, int amount) {
         basket[productNum] += amount;
-        int[][] toFile;
         try {
             saveTxt(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.txt"));
         } catch (IOException error) {
