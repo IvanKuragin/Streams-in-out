@@ -14,11 +14,11 @@ public class Main {
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
-        if (Basket.loadFromBinFile() == null) {
+        if (Basket.loadFromBinFile(binFile) == null) {
             Main.basket = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                     new int[]{50, 80, 60, 10}, new int[]{0, 0, 0, 0});
         } else {
-            Main.basket = Basket.loadFromBinFile();
+            Main.basket = Basket.loadFromBinFile(binFile);
         }
 
         while (true) {

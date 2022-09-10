@@ -8,24 +8,23 @@ public class Basket implements Serializable {
 
     private final int[] prices;
 
-    protected int[] basket;
+    protected static int[] basket = new int[4];
 
     protected int[] summary;
 
     protected int sum;
-    public static File binFile;
+    public File binFile;
 
-    public Basket(String[] products, int[] prices, int[] basket) {
+    public Basket(String[] products, int[] prices, int[] basketFile) {
         this.products = products;
         this.prices = prices;
-        this.basket = basket;
+        basket = basketFile;
         this.summary = new int[SHOP_SIZE];
     }
 
-    public int[] addToCart(int productNum, int amount) {
+    public void addToCart(int productNum, int amount) {
         basket[productNum] += amount;
         saveBin(Main.binFile);
-        return basket;
     }
 
     public void printCart() {
@@ -59,7 +58,7 @@ public class Basket implements Serializable {
     }
 
     public void saveBin(File file) {
-        Basket.binFile = file;
+        this.binFile = file;
         Basket basketBin = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
                 new int[]{50, 80, 60, 10}, basket);
         try (FileOutputStream fos = new FileOutputStream(file);
@@ -70,9 +69,9 @@ public class Basket implements Serializable {
         }
     }
 
-    static Basket loadFromBinFile() {
+    static Basket loadFromBinFile(File file) {
         Basket basketBin = null;
-        try (FileInputStream fis = new FileInputStream("E:\\IDEA\\Projects\\Stream in out. Serialization\\Basket.bin");
+        try (FileInputStream fis = new FileInputStream(file);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             basketBin = (Basket) ois.readObject();
         } catch (Exception error) {
