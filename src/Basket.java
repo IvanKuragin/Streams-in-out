@@ -107,6 +107,7 @@ public class Basket implements Serializable {
     public static void fileTermination() {
         try {
             boolean termination = textFile.delete();
+            boolean terminationBin = binFile.delete();
         } catch (NullPointerException error) {
             System.out.println("Операция завершена!");
         }
