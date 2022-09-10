@@ -20,7 +20,7 @@ public class Basket {
 
     protected int sum;
 
-    protected static File textFile;
+    public static File textFile;
 
     public Basket(String[] products, int[] prices, int[] basket) {
         this.products = products;
@@ -107,7 +107,7 @@ public class Basket {
         try {
             boolean termination = textFile.delete();
         } catch (NullPointerException error) {
-            System.out.println("Операция завершена!");
+            System.out.println("Операция не завершена!");
         }
     }
 }
