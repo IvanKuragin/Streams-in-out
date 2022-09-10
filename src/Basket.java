@@ -58,14 +58,6 @@ public class Basket implements Serializable {
         return products;
     }
 
-    public static void fileTermination() {
-        try {
-            binFile.delete();
-        } catch (NullPointerException error) {
-            System.out.println("Операция не завершена!");
-        }
-    }
-
     public void saveBin(File file) {
         Basket.binFile = file;
         Basket basketBin = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
