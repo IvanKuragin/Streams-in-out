@@ -16,9 +16,6 @@ public class Basket implements Serializable {
     protected int[] summary;
 
     protected int sum;
-
-    protected static File textFile;
-
     public static File binFile;
 
     public Basket(String[] products, int[] prices, int[] basket) {
@@ -31,9 +28,8 @@ public class Basket implements Serializable {
     public int[] addToCart(int productNum, int amount) {
         basket[productNum] += amount;
         try {
-            saveTxt(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.txt"));
             saveBin(new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.bin"));
-        } catch (IOException error) {
+        } catch (Exception error) {
             System.out.println(error.getMessage());
         }
         return basket;
@@ -68,48 +64,11 @@ public class Basket implements Serializable {
     String[] getProducts() {
         return products;
     }
-
-    public void saveTxt(File textFile) throws IOException {
-        Basket.textFile = textFile;
-        try {
-            boolean creation = textFile.createNewFile();
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
-        }
-        try (PrintWriter out = new PrintWriter(textFile)) {
-            for (int amount : basket) {
-                out.print(amount + " ");
-            }
-        }
-    }
-
-    static Basket loadFromTxtFile() {
-        int[] basket = new int[SHOP_SIZE];
-        try (FileReader in = new FileReader("Basket.txt", StandardCharsets.UTF_8)) {
-            List<Integer> list = new ArrayList<>();
-            while (in.ready()) {
-                char c = (char) in.read();
-                int c1 = Character.getNumericValue(c);
-                if (c1 >= 0) {
-                    list.add(c1);
-                }
-            }
-            for (int i = 0; i < list.size(); i++) {
-                basket[i] = list.get(i);
-            }
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
-        }
-        return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
-                new int[]{50, 80, 60, 10}, basket);
-    }
-
     public static void fileTermination() {
         try {
-            boolean termination = textFile.delete();
-            boolean terminationBin = binFile.delete();
+            binFile.delete();
         } catch (NullPointerException error) {
-            System.out.println("Операция завершена!");
+            System.out.println("Операция не завершена!");
         }
     }
 
@@ -119,7 +78,7 @@ public class Basket implements Serializable {
                 new int[]{50, 80, 60, 10}, basket);
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            boolean creation = binFile.createNewFile();
+//            binFile.createNewFile();
             oos.writeObject(basketBin);
         } catch (Exception error) {
             System.out.println(error.getMessage());
