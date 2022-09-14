@@ -1,10 +1,9 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 
 public class Basket {
 
@@ -12,7 +11,7 @@ public class Basket {
 
     private final int[] prices;
 
-    protected static int[] basket = new int[4];
+    protected int[] basket;
 
     protected int[] summary;
 
@@ -37,6 +36,7 @@ public class Basket {
     }
 
     public void printCart() {
+        sum = 0;
         System.out.println("Ваша корзина:");
         for (int i = 0; i < products.length; i++) {
             if (basket[i] > 0) {
@@ -55,43 +55,61 @@ public class Basket {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-    void getProductList() {
-        System.out.println("Список возможных товаров для покупки:");
-        for (int i = 0; i < products.length; i++) {
-            System.out.println((i + 1) + ". " + products[i] + " " + prices[i] + " руб./шт.");
-        }
-    }
-
-    String[] getProducts() {
-        return products;
-    }
-
     public void saveTxt(File textFile) throws IOException {
         this.textFile = textFile;
         try (PrintWriter out = new PrintWriter(textFile)) {
-            for (int amount : basket) {
-                out.print(amount + " ");
+            for (int i = 0; i < products.length; i++) {
+                if (basket[i] > 0) {
+                    out.print(products[i] + " " + basket[i] + " "
+                            + prices[i] + "\n");
+                }
             }
         }
     }
 
     static Basket loadFromTxtFile(File textFile) {
+        List<String> products = new ArrayList<>();
+        List<String> basket1 = new ArrayList<>();
+        List<String> prices = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
         try (FileReader in = new FileReader(textFile, StandardCharsets.UTF_8)) {
-            List<Integer> list = new ArrayList<>();
             while (in.ready()) {
-                char c = (char) in.read();
-                int c1 = Character.getNumericValue(c);
-                if (c1 >= 0) {
-                    list.add(c1);
+                for (int i = 0; i < 1; i++) {
+                    char c = (char) in.read();
+                    if (c != 0) {
+                        sb.append(c);
+                    }
                 }
             }
-            for (int i = 0; i < list.size(); i++) {
-                basket[i] = list.get(i);
-            }
         } catch (IOException error) {
-            System.out.println(error.getMessage());
+            error.getMessage();
         }
-        return new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт"},
-                new int[]{50, 80, 60, 10}, basket);
+        String text1 = sb.toString();
+        String[] lines = text1.split("\n");
+        List<String> text = new ArrayList<>(Arrays.asList(lines));
+        for (int i = 0; i < text.size(); i++) {
+            String line = text.get(i);
+            String[] lineArray = line.split(" ");
+            for (int j = 0; j < line.length(); ) {
+                products.add(lineArray[j]);
+                for (int k = 1; k < line.length(); ) {
+                    basket1.add(lineArray[k]);
+                    for (int l = 2; l < line.length() - 1; ) {
+                        prices.add(lineArray[l]);
+                        break;
+                    }
+                    break;
+                }
+                break;
+            }
+        }
+        if (text1.equals("")) {
+            return null;
+        } else {
+            String[] productsArr = products.toArray(new String[products.size()]);
+            int[] basketArr = basket1.stream().mapToInt(Integer::parseInt).toArray();
+            int[] pricesArr = prices.stream().mapToInt(Integer::parseInt).toArray();
+            return new Basket(productsArr, pricesArr, basketArr);
+        }
     }
 }
