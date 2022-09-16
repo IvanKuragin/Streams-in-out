@@ -52,6 +52,7 @@ public class Main {
                     throw new RuntimeException("Введено некорректное количество товара! Пожалуйста, укажите количество еще раз.");
                 }
                 basket.addToCart(productNum, amount);
+                basket.saveBin(binFile);
             } catch (NumberFormatException error) {
                 System.out.println("Вы ввели название товара! Пожалуйста, введите его номер по списку");
                 continue;

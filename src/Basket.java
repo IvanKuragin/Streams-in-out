@@ -22,7 +22,6 @@ public class Basket implements Serializable {
 
     public void addToCart(int productNum, int amount) {
         basket[productNum] += amount;
-        saveBin(Main.binFile);
     }
 
     public void printCart() {
