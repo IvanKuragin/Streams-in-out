@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -58,6 +59,11 @@ public class Main {
                     throw new RuntimeException("Введено некорректное количество товара! Пожалуйста, укажите количество еще раз.");
                 }
                 basket.addToCart(productNum, amount);
+                try {
+                    basket.saveTxt(textFile);
+                } catch (IOException error) {
+                    System.out.println(error.getMessage());
+                }
             } catch (NumberFormatException error) {
                 System.out.println("Вы ввели название товара! Пожалуйста, введите его номер по списку");
                 continue;

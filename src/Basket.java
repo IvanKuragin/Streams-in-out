@@ -28,11 +28,6 @@ public class Basket {
 
     public void addToCart(int productNum, int amount) {
         basket[productNum] += amount;
-        try {
-            saveTxt(Main.textFile);
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
-        }
     }
 
     public int [] getBasket() {
