@@ -47,10 +47,9 @@ public class Basket implements Serializable {
 
     public void saveBin(File file) {
         this.binFile = file;
-        Basket basketBin = new Basket(products, prices, basket);
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(basketBin);
+            oos.writeObject(this);
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
