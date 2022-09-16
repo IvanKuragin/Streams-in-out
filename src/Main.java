@@ -9,6 +9,8 @@ public class Main {
 
     public static int[] shopPrices = {50, 80, 60, 10};
 
+    public static int[] cart = {0, 0, 0, 0};
+
     public static boolean isCreated;
 
     public static void main(String[] args) {
@@ -21,10 +23,14 @@ public class Main {
         }
         Basket basket;
         if (Basket.loadFromTxtFile(textFile) == null) {
-            basket = new Basket(shopProducts, shopPrices, new int[]{0, 0, 0, 0});
+            basket = new Basket(shopProducts, shopPrices, cart);
         } else {
             basket = Basket.loadFromTxtFile(textFile);
             basket.printCart();
+            for (int i=0; i<basket.getBasket().length;i++){
+                cart[i] = basket.getBasket()[i];
+            }
+            basket = new Basket (shopProducts, shopPrices, cart);
         }
 
 

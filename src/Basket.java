@@ -7,9 +7,9 @@ import java.util.List;
 
 public class Basket {
 
-    private final String[] products;
+    protected String[] products;
 
-    private final int[] prices;
+    protected int[] prices;
 
     protected int[] basket;
 
@@ -33,6 +33,10 @@ public class Basket {
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
+    }
+
+    public int [] getBasket() {
+        return basket;
     }
 
     public void printCart() {
