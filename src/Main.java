@@ -3,26 +3,36 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static Basket basket;
     public static File binFile;
+
+    public static String [] shopProducts = {"Хлеб", "Яблоки", "Молоко", "Йогурт"};
+
+    public static int [] shopPrices = {50, 80, 60, 10};
+
+    public static boolean isCreated;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         try {
             binFile = new File("E:\\IDEA\\Projects\\Stream in out. Serialization", "Basket.bin");
-            binFile.createNewFile();
+            isCreated = binFile.createNewFile();
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
+        Basket basket;
+
         if (Basket.loadFromBinFile(binFile) == null) {
-            Main.basket = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
-                    new int[]{50, 80, 60, 10}, new int[]{0, 0, 0, 0});
+            basket = new Basket(shopProducts, shopPrices, new int[]{0, 0, 0, 0});
         } else {
-            Main.basket = Basket.loadFromBinFile(binFile);
+            basket = Basket.loadFromBinFile(binFile);
+            basket.printCart();
         }
 
         while (true) {
-            basket.getProductList();
+            System.out.println("Список возможных товаров для покупки:");
+            for (int i = 0; i < shopProducts.length; i++) {
+                System.out.println((i + 1) + ". " + shopProducts[i] + " " + shopPrices[i] + " руб./шт.");
+            }
             System.out.println("Выберите товар и количество или введите 'end'");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
@@ -34,7 +44,7 @@ public class Main {
             }
             try {
                 int productNum = Integer.parseInt(custChoice[0]) - 1;
-                if ((productNum + 1) > basket.getProducts().length || (productNum + 1) < 0) {
+                if ((productNum + 1) > shopProducts.length || (productNum + 1) < 0) {
                     throw new RuntimeException("Введен некорректный номер товара! Пожалуйста, введите номер из списка.");
                 }
                 int amount = Integer.parseInt(custChoice[1]);

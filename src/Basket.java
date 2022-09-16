@@ -2,8 +2,6 @@ import java.io.*;
 
 public class Basket implements Serializable {
 
-    private static final int SHOP_SIZE = 4;
-
     private final String[] products;
 
     private final int[] prices;
@@ -19,7 +17,7 @@ public class Basket implements Serializable {
         this.products = products;
         this.prices = prices;
         basket = basketFile;
-        this.summary = new int[SHOP_SIZE];
+        this.summary = new int[4];
     }
 
     public void addToCart(int productNum, int amount) {
@@ -28,6 +26,7 @@ public class Basket implements Serializable {
     }
 
     public void printCart() {
+        sum = 0;
         System.out.println("Ваша корзина:");
         for (int i = 0; i < products.length; i++) {
             if (basket[i] > 0) {
@@ -46,21 +45,9 @@ public class Basket implements Serializable {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-    void getProductList() {
-        System.out.println("Список возможных товаров для покупки:");
-        for (int i = 0; i < products.length; i++) {
-            System.out.println((i + 1) + ". " + products[i] + " " + prices[i] + " руб./шт.");
-        }
-    }
-
-    String[] getProducts() {
-        return products;
-    }
-
     public void saveBin(File file) {
         this.binFile = file;
-        Basket basketBin = new Basket(new String[]{"Хлеб", "Яблоки", "Молоко", "Йогурт",},
-                new int[]{50, 80, 60, 10}, basket);
+        Basket basketBin = new Basket(products, prices, basket);
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(basketBin);
