@@ -4,7 +4,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static File textFile;
+    public static File jsonFile;
+
+    public static File txtFile;
 
     public static String[] shopProducts = {"Хлеб", "Яблоки", "Молоко", "Йогурт"};
 
@@ -16,22 +18,24 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        ClientLog log = new ClientLog();
         try {
-            textFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "Basket.txt");
-            isCreated = textFile.createNewFile();
+            jsonFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "Basket.json");
+            isCreated = jsonFile.createNewFile();
+            txtFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "client.csv");
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
         Basket basket;
-        if (Basket.loadFromTxtFile(textFile) == null) {
+        if (Basket.loadFromJsonFile(jsonFile) == null) {
             basket = new Basket(shopProducts, shopPrices, cart);
         } else {
-            basket = Basket.loadFromTxtFile(textFile);
+            basket = Basket.loadFromJsonFile(jsonFile);
             basket.printCart();
-            for (int i=0; i<basket.getBasket().length;i++){
+            for (int i = 0; i < basket.getBasket().length; i++) {
                 cart[i] = basket.getBasket()[i];
             }
-            basket = new Basket (shopProducts, shopPrices, cart);
+            basket = new Basket(shopProducts, shopPrices, cart);
         }
 
 
@@ -59,8 +63,10 @@ public class Main {
                     throw new RuntimeException("Введено некорректное количество товара! Пожалуйста, укажите количество еще раз.");
                 }
                 basket.addToCart(productNum, amount);
+                log.log(productNum, amount);
+                log.exportAsCSV(txtFile);
                 try {
-                    basket.saveTxt(textFile);
+                    basket.saveJson(jsonFile);
                 } catch (IOException error) {
                     System.out.println(error.getMessage());
                 }
@@ -70,6 +76,6 @@ public class Main {
             }
         }
         basket.printCart();
-        textFile.delete();
+        jsonFile.delete();
     }
 }

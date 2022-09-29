@@ -1,3 +1,5 @@
+import org.json.simple.JSONArray;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class Basket {
 
     protected int sum;
 
-    public File textFile;
+    public File jsonFile;
 
     public Basket(String[] products, int[] prices, int[] basketFile) {
         this.products = products;
@@ -30,7 +32,7 @@ public class Basket {
         basket[productNum] += amount;
     }
 
-    public int [] getBasket() {
+    public int[] getBasket() {
         return basket;
     }
 
@@ -54,28 +56,30 @@ public class Basket {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-    public void saveTxt(File textFile) throws IOException {
-        this.textFile = textFile;
-        try (PrintWriter out = new PrintWriter(textFile)) {
-            for (int i = 0; i < products.length; i++) {
-                if (basket[i] > 0) {
-                    out.print(products[i] + " " + basket[i] + " "
-                            + prices[i] + "\n");
-                }
+    public void saveJson(File jsonFile) throws IOException {
+        this.jsonFile = jsonFile;
+        JSONArray list = new JSONArray();
+        for (int i = 0; i < products.length; i++) {
+            if (basket[i] > 0) {
+                list.add(products[i] + " " + basket[i] + " "
+                        + prices[i]);
             }
+        }
+        try (FileWriter out = new FileWriter(jsonFile)) {
+            out.write(list.toJSONString());
         }
     }
 
-    static Basket loadFromTxtFile(File textFile) {
+    static Basket loadFromJsonFile(File jsonFile) {
         List<String> products = new ArrayList<>();
         List<String> basket1 = new ArrayList<>();
         List<String> prices = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
-        try (FileReader in = new FileReader(textFile, StandardCharsets.UTF_8)) {
+        try (FileReader in = new FileReader(jsonFile, StandardCharsets.UTF_8)) {
             while (in.ready()) {
                 for (int i = 0; i < 1; i++) {
                     char c = (char) in.read();
-                    if (c != 0) {
+                    if (c != 0 && c != '[' && c != ']' && c != '"') {
                         sb.append(c);
                     }
                 }
@@ -84,7 +88,7 @@ public class Basket {
             error.getMessage();
         }
         String text1 = sb.toString();
-        String[] lines = text1.split("\n");
+        String[] lines = text1.split(",");
         List<String> text = new ArrayList<>(Arrays.asList(lines));
         for (int i = 0; i < text.size(); i++) {
             String line = text.get(i);
