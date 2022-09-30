@@ -20,9 +20,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         ClientLog log = new ClientLog();
         try {
-            jsonFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "Basket.json");
+            jsonFile = new File("basket.json");
             isCreated = jsonFile.createNewFile();
-            txtFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "client.csv");
+            txtFile = new File("client.csv");
+            isCreated = txtFile.createNewFile();
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
