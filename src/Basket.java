@@ -11,13 +11,14 @@ public class Basket implements Serializable {
     protected int[] summary;
 
     protected int sum;
-    public File binFile;
+    
+    protected File binFile;
 
     public Basket(String[] products, int[] prices, int[] basketFile) {
         this.products = products;
         this.prices = prices;
         basket = basketFile;
-        this.summary = new int[4];
+        this.summary = new int[products.length];
     }
 
     public void addToCart(int productNum, int amount) {
