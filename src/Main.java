@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         try {
-            binFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "Basket.bin");
+            binFile = new File("Basket.bin");
             isCreated = binFile.createNewFile();
         } catch (Exception error) {
             System.out.println(error.getMessage());
