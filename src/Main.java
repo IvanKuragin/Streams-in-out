@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         try {
-            textFile = new File("E:\\IDEA\\Projects\\Streams-in-out", "Basket.txt");
+            textFile = new File("Basket.txt");
             isCreated = textFile.createNewFile();
         } catch (Exception error) {
             System.out.println(error.getMessage());
