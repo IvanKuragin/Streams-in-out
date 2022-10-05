@@ -14,6 +14,8 @@ public class Main {
 
     public static int[] cart = {0, 0, 0, 0};
 
+    public static int[] shopSummary = new int[shopProducts.length];
+
     public static boolean isCreated;
 
     public static void main(String[] args) {
@@ -29,14 +31,17 @@ public class Main {
         }
         Basket basket;
         if (Basket.loadFromJsonFile(jsonFile) == null) {
-            basket = new Basket(shopProducts, shopPrices, cart);
+            basket = new Basket();
+            basket.setProducts(shopProducts);
+            basket.setPrices(shopPrices);
+            basket.setBasket(cart);
+            basket.setSummary(shopSummary);
         } else {
             basket = Basket.loadFromJsonFile(jsonFile);
             basket.printCart();
             for (int i = 0; i < basket.getBasket().length; i++) {
                 cart[i] = basket.getBasket()[i];
             }
-            basket = new Basket(shopProducts, shopPrices, cart);
         }
 
 

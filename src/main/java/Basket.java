@@ -1,10 +1,7 @@
-import org.json.simple.JSONArray;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class Basket {
@@ -21,11 +18,23 @@ public class Basket {
 
     protected File jsonFile;
 
-    public Basket(String[] products, int[] prices, int[] basketFile) {
+    public Basket() {
+    }
+
+    public void setProducts(String[] products) {
         this.products = products;
+    }
+
+    public void setPrices(int[] prices) {
         this.prices = prices;
+    }
+
+    public void setBasket(int[] basketFile) {
         basket = basketFile;
-        this.summary = new int[products.length];
+    }
+
+    public void setSummary(int[] summary) {
+        this.summary = summary;
     }
 
     public void addToCart(int productNum, int amount) {
@@ -58,61 +67,30 @@ public class Basket {
 
     public void saveJson(File jsonFile) throws IOException {
         this.jsonFile = jsonFile;
-        JSONArray list = new JSONArray();
-        for (int i = 0; i < products.length; i++) {
-            if (basket[i] > 0) {
-                list.add(products[i] + " " + basket[i] + " "
-                        + prices[i]);
-            }
-        }
-        try (FileWriter out = new FileWriter(jsonFile)) {
-            out.write(list.toJSONString());
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        String json = gson.toJson(this);
+        try (PrintWriter out = new PrintWriter(jsonFile)) {
+            out.println(json);
         }
     }
 
     static Basket loadFromJsonFile(File jsonFile) {
-        List<String> products = new ArrayList<>();
-        List<String> basket1 = new ArrayList<>();
-        List<String> prices = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        try (FileReader in = new FileReader(jsonFile, StandardCharsets.UTF_8)) {
-            while (in.ready()) {
-                for (int i = 0; i < 1; i++) {
-                    char c = (char) in.read();
-                    if (c != 0 && c != '[' && c != ']' && c != '"') {
-                        sb.append(c);
-                    }
-                }
+        Basket basket = null;
+        String line;
+        String jsonText;
+        try (BufferedReader reader = new BufferedReader(new FileReader(jsonFile))) {
+            StringBuilder sb = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
             }
+            jsonText = sb.toString();
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            basket = gson.fromJson(jsonText, Basket.class);
         } catch (IOException error) {
-            error.getMessage();
+            System.out.println(error.getMessage());
         }
-        String text1 = sb.toString();
-        String[] lines = text1.split(",");
-        List<String> text = new ArrayList<>(Arrays.asList(lines));
-        for (int i = 0; i < text.size(); i++) {
-            String line = text.get(i);
-            String[] lineArray = line.split(" ");
-            for (int j = 0; j < line.length(); ) {
-                products.add(lineArray[j]);
-                for (int k = 1; k < line.length(); ) {
-                    basket1.add(lineArray[k]);
-                    for (int l = 2; l < line.length() - 1; ) {
-                        prices.add(lineArray[l]);
-                        break;
-                    }
-                    break;
-                }
-                break;
-            }
-        }
-        if (text1.equals("")) {
-            return null;
-        } else {
-            String[] productsArr = products.toArray(new String[products.size()]);
-            int[] basketArr = basket1.stream().mapToInt(Integer::parseInt).toArray();
-            int[] pricesArr = prices.stream().mapToInt(Integer::parseInt).toArray();
-            return new Basket(productsArr, pricesArr, basketArr);
-        }
+        return basket;
     }
 }
