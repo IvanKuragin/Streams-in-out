@@ -1,3 +1,7 @@
+import org.xml.sax.SAXException;
+
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -18,14 +22,23 @@ public class Main {
 
     public static boolean isCreated;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SAXException, ParserConfigurationException {
+        ShopXmlReader.docReader();
+        ShopXmlReader.loadConfig();
+        ShopXmlReader.saveConfig();
+        ShopXmlReader.logConfig();
         Scanner scanner = new Scanner(System.in);
         ClientLog log = new ClientLog();
         try {
-            jsonFile = new File("basket.json");
-            isCreated = jsonFile.createNewFile();
-            txtFile = new File("client.csv");
-            isCreated = txtFile.createNewFile();
+            if (ShopXmlReader.saveBoolean) {
+                jsonFile = new File("basket.json");
+                isCreated = jsonFile.createNewFile();
+            }
+            if (ShopXmlReader.logBoolean) {
+                txtFile = new File("client.csv");
+                isCreated = txtFile.createNewFile();
+            }
+
         } catch (Exception error) {
             System.out.println(error.getMessage());
         }
@@ -69,12 +82,16 @@ public class Main {
                     throw new RuntimeException("Введено некорректное количество товара! Пожалуйста, укажите количество еще раз.");
                 }
                 basket.addToCart(productNum, amount);
-                log.log(productNum, amount);
-                log.exportAsCSV(txtFile);
-                try {
-                    basket.saveJson(jsonFile);
-                } catch (IOException error) {
-                    System.out.println(error.getMessage());
+                if (ShopXmlReader.logBoolean) {
+                    log.log(productNum, amount);
+                    log.exportAsCSV(txtFile);
+                }
+                if (ShopXmlReader.saveBoolean) {
+                    try {
+                        basket.saveJson(jsonFile);
+                    } catch (IOException error) {
+                        System.out.println(error.getMessage());
+                    }
                 }
             } catch (NumberFormatException error) {
                 System.out.println("Вы ввели название товара! Пожалуйста, введите его номер по списку");
@@ -82,6 +99,8 @@ public class Main {
             }
         }
         basket.printCart();
-        jsonFile.delete();
+        if (ShopXmlReader.saveBoolean) {
+            jsonFile.delete();
+        }
     }
 }

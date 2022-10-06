@@ -7,13 +7,13 @@
     </load>
 
     <save>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
         <fileName>basket.json</fileName>
         <format>json</format>
     </save>
 
     <log>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
         <fileName>client.csv</fileName>
     </log>
 </config>

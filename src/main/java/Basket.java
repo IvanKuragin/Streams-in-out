@@ -77,19 +77,21 @@ public class Basket {
 
     static Basket loadFromJsonFile(File jsonFile) {
         Basket basket = null;
-        String line;
-        String jsonText;
-        try (BufferedReader reader = new BufferedReader(new FileReader(jsonFile))) {
-            StringBuilder sb = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
+        if (ShopXmlReader.loadBoolean && ShopXmlReader.saveBoolean) {
+            String line;
+            String jsonText;
+            try (BufferedReader reader = new BufferedReader(new FileReader(jsonFile))) {
+                StringBuilder sb = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                jsonText = sb.toString();
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                basket = gson.fromJson(jsonText, Basket.class);
+            } catch (IOException error) {
+                System.out.println(error.getMessage());
             }
-            jsonText = sb.toString();
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
-            basket = gson.fromJson(jsonText, Basket.class);
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
         }
         return basket;
     }
