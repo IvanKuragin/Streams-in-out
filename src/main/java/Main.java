@@ -10,7 +10,7 @@ public class Main {
 
     public static File jsonFile;
 
-    public static File txtFile;
+    public static File csvFile;
 
     public static String[] shopProducts = {"Хлеб", "Яблоки", "Молоко", "Йогурт"};
 
@@ -35,8 +35,8 @@ public class Main {
                 isCreated = jsonFile.createNewFile();
             }
             if (ShopXmlReader.logBoolean) {
-                txtFile = new File("client.csv");
-                isCreated = txtFile.createNewFile();
+                csvFile = new File("client.csv");
+                isCreated = csvFile.createNewFile();
             }
 
         } catch (Exception error) {
@@ -84,7 +84,7 @@ public class Main {
                 basket.addToCart(productNum, amount);
                 if (ShopXmlReader.logBoolean) {
                     log.log(productNum, amount);
-                    log.exportAsCSV(txtFile);
+                    log.exportAsCSV(csvFile);
                 }
                 if (ShopXmlReader.saveBoolean) {
                     try {
