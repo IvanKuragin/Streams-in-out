@@ -17,7 +17,7 @@ public class ShopXmlReader {
     protected static boolean saveBoolean;
     protected static boolean logBoolean;
 
-    public static void docReader () throws SAXException, ParserConfigurationException {
+    public static void docReader() throws SAXException, ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         try {
@@ -27,7 +27,7 @@ public class ShopXmlReader {
         }
     }
 
-    public static void loadConfig () {
+    public static void loadConfig() {
         NodeList nodeList = configDoc.getElementsByTagName("load");
         String text = nodeList.item(0).getTextContent();
         String[] text1 = text.split("\n");
@@ -38,7 +38,7 @@ public class ShopXmlReader {
         }
     }
 
-    public static void saveConfig () {
+    public static void saveConfig() {
         NodeList nodeList = configDoc.getElementsByTagName("save");
         String text = nodeList.item(0).getTextContent();
         String[] text1 = text.split("\n");
@@ -49,7 +49,7 @@ public class ShopXmlReader {
         }
     }
 
-    public static void logConfig () {
+    public static void logConfig() {
         NodeList nodeList = configDoc.getElementsByTagName("log");
         String text = nodeList.item(0).getTextContent();
         String[] text1 = text.split("\n");

@@ -31,7 +31,7 @@ public class ClientLog {
         ColumnPositionMappingStrategy<Log> strategy = new ColumnPositionMappingStrategy<>();
         strategy.setType(Log.class);
         strategy.setColumnMapping("productNum", "amount");
-        String [] title1 = {"productNum,amount"};
+        String[] title1 = {"productNum,amount"};
         if (csvFile.length() == 0) {
             try (CSVWriter title = new CSVWriter(new FileWriter(csvFile, true))) {
                 title.writeNext(title1);
@@ -40,14 +40,14 @@ public class ClientLog {
             }
         }
 
-            try (FileWriter writer = new FileWriter(csvFile, true)) {
-                StatefulBeanToCsv<Log> sbc = new StatefulBeanToCsvBuilder<Log>(writer)
-                        .withMappingStrategy(strategy)
-                        .build();
-                sbc.write(list);
-            } catch (IOException | CsvRequiredFieldEmptyException | CsvDataTypeMismatchException error) {
-                error.printStackTrace();
-            }
-            list.clear();
+        try (FileWriter writer = new FileWriter(csvFile, true)) {
+            StatefulBeanToCsv<Log> sbc = new StatefulBeanToCsvBuilder<Log>(writer)
+                    .withMappingStrategy(strategy)
+                    .build();
+            sbc.write(list);
+        } catch (IOException | CsvRequiredFieldEmptyException | CsvDataTypeMismatchException error) {
+            error.printStackTrace();
         }
+        list.clear();
+    }
 }
