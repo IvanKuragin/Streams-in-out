@@ -10,7 +10,7 @@ public class Main {
 
     public static int[] shopPrices = {50, 80, 60, 10};
 
-    public static int[] cart = {0, 0, 0, 0};
+    public static int[] cart = new int [shopProducts.length];
 
     public static boolean isCreated;
 
