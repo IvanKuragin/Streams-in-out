@@ -2,8 +2,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 
 @DisplayName("Тестирование класса Basket")
@@ -25,14 +24,26 @@ public class BasketTest {
                 (new String[]{"Овощи", "Конфеты"}, new int[]{50, 100}, new int[]{0, 0});
         File textFile = new File("BasketTest.txt");
         basket.addToCart(0, 1);
+        int count = 0;
         try {
             basket.saveTxt(textFile);
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
-//        Use it to find out the file length
-//        System.out.println(textFile.length());
-        Assertions.assertEquals(16, textFile.length());
+        try (BufferedReader reader = new BufferedReader(new FileReader(textFile))) {
+            while (reader.ready()) {
+                for (char symbol : reader.readLine().toCharArray()) {
+                    if (symbol != ' ' & symbol != '\n') {
+                        count++;
+                    }
+                }
+            }
+        } catch (IOException error) {
+            System.out.println(error.getMessage());
+        }
+//        Use it to find the number of chars in the file. No spaces and line shifters.
+//        System.out.println(count);
+        Assertions.assertEquals(8, count);
         textFile.delete();
     }
 }
